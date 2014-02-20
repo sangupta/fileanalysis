@@ -25,6 +25,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import com.sangupta.fileanalysis.formats.base.AbstractLogFileFormatHandler;
 import com.sangupta.jerry.util.AssertUtils;
 
 /**

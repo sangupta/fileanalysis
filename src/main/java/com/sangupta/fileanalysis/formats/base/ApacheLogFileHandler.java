@@ -19,7 +19,7 @@
  * 
  */
 
-package com.sangupta.fileanalysis.formats;
+package com.sangupta.fileanalysis.formats.base;
 
 import java.io.File;
 import java.io.IOException;

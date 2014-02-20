@@ -35,6 +35,7 @@ import com.sangupta.fileanalysis.db.DBColumnType;
 import com.sangupta.fileanalysis.db.DBHelper;
 import com.sangupta.fileanalysis.db.Database;
 import com.sangupta.fileanalysis.db.DatabaseTable;
+import com.sangupta.fileanalysis.formats.base.AbstractFileFormatHandler;
 
 /**
  * 

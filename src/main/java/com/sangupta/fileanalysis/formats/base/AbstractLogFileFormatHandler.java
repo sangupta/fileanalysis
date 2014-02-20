@@ -19,7 +19,7 @@
  * 
  */
 
-package com.sangupta.fileanalysis.formats;
+package com.sangupta.fileanalysis.formats.base;
 
 import java.io.File;
 import java.io.IOException;
@@ -219,23 +219,23 @@ public abstract class AbstractLogFileFormatHandler extends AbstractFileFormatHan
 	 */
 	protected static class LogRecord {
 		
-		Date date;
+		public Date date;
 		
-		String thread;
+		public String thread;
 		
-		String level;
+		public String level;
 		
-		String clazz;
+		public String clazz;
 		
-		int lineNumber;
+		public int lineNumber;
 		
-		String msg;
+		public String msg;
 		
-		String message;
+		public String message;
 		
-		String error;
+		public String error;
 
-		void reset() {
+		public void reset() {
 			date = null;
 			thread = null;
 			level = null;
