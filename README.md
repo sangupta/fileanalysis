@@ -41,10 +41,13 @@ Changelog
 
 **Current SNAPSHOT**
 
-* Added `CSV` format
-* Added `Apache log4j` format
+* Added `CSV` format - comma-delimited files
+* Added Apache `log4j` format
 * Added `logback` format
-
+* Added Apache `httpd` log format
+* Added `TSV` format - tab-delimited files
+* Added pipe-delimited format
+* Added custom-delimited format
 
 Dependencies
 ------------
