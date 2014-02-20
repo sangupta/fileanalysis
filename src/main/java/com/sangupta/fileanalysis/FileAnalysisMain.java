@@ -51,7 +51,7 @@ public class FileAnalysisMain {
 			return;
 		}
 		
-		System.out.println("Valid file formats: csv, log4j, logback");
+		System.out.println("Valid file formats: csv, tsv, pipe, delim, httpd, log4j, logback");
 		String fileFormat = ConsoleUtils.readLine("Enter file format: ", true);
 		if(AssertUtils.isEmpty(fileFormat)) {
 			System.out.println("No file format specified... exiting!");

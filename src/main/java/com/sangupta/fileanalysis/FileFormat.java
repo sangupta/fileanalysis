@@ -23,8 +23,10 @@ package com.sangupta.fileanalysis;
 
 import com.sangupta.fileanalysis.formats.ApacheLogFileHandler;
 import com.sangupta.fileanalysis.formats.CSVFileHandler;
+import com.sangupta.fileanalysis.formats.DelimFileHandler;
 import com.sangupta.fileanalysis.formats.Log4jFileHandler;
 import com.sangupta.fileanalysis.formats.LogbackFileHandler;
+import com.sangupta.fileanalysis.formats.PipeFileHandler;
 import com.sangupta.fileanalysis.formats.TSVFileHandler;
 import com.sangupta.fileanalysis.formats.base.DoNothingHandler;
 
@@ -39,6 +41,10 @@ public enum FileFormat {
 	CSV,
 	
 	TSV,
+	
+	Pipe,
+	
+	Delimited,
 	
 	ApacheLog,
 	
@@ -62,6 +68,12 @@ public enum FileFormat {
 				
 			case TSV:
 				return new TSVFileHandler();
+				
+			case Pipe:
+				return new PipeFileHandler();
+				
+			case Delimited:
+				return new DelimFileHandler();
 				
 			default:
 				break;
