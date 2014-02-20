@@ -26,6 +26,7 @@ import com.sangupta.fileanalysis.formats.CSVFileHandler;
 import com.sangupta.fileanalysis.formats.DoNothingHandler;
 import com.sangupta.fileanalysis.formats.Log4jFileHandler;
 import com.sangupta.fileanalysis.formats.LogbackFileHandler;
+import com.sangupta.fileanalysis.formats.TSVFileHandler;
 
 /**
  * Various supported file formats.
@@ -60,7 +61,7 @@ public enum FileFormat {
 				return new LogbackFileHandler();
 				
 			case TSV:
-				break;
+				return new TSVFileHandler();
 				
 			default:
 				break;
