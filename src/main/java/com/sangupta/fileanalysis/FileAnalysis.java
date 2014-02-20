@@ -99,19 +99,23 @@ public class FileAnalysis implements Closeable {
 		// start loading data
 		System.out.println("Populating data...");
 		try {
+			long start = System.currentTimeMillis();
 			handler.loadFile();
+			long end = System.currentTimeMillis();
+			
+			System.out.println("Loaded data in " + (end - start) + " millis.");
 		} catch (IOException e) {
 			// unable to load file
 			System.out.println("Unable to load data file: " + e.getMessage());
 			return;
-		}
+		} 
 		
 		// update the list of col sizes in database
 		this.database.updateColSizes();
 		
 		// show the query prompt
 		do {
-			String query = ConsoleUtils.readLine("\nfa query$ ", true);
+			String query = ConsoleUtils.readLine("\nfa-query $ ", true);
 			if(AssertUtils.isBlank(query)) {
 				continue;
 			}

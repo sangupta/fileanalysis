@@ -40,26 +40,17 @@ public class FileAnalysisMain {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		String filePath = ConsoleUtils.readLine("Enter file path to be analyzed: ", true);
-		if(AssertUtils.isEmpty(filePath)) {
-			System.out.println("Nothing to do... exiting!");
-			return;
-		}
-		
-		File file = getInputFile(filePath);
+		File file = getInputFile();
 		if(file == null) {
 			return;
 		}
 		
-		System.out.println("Valid file formats: csv, tsv, pipe, delim, httpd, log4j, logback");
-		String fileFormat = ConsoleUtils.readLine("Enter file format: ", true);
-		if(AssertUtils.isEmpty(fileFormat)) {
-			System.out.println("No file format specified... exiting!");
+		FileFormat format = getFileFormat(file);
+		if(format == null) {
+			System.out.println("File format not understood by the tool... exiting!");
 			return;
 		}
 		
-		FileFormat format = getFileFormat(fileFormat, file);
-
 		// check the validity of the parameters
 		System.out.println("Checking parameters...");
 
@@ -74,24 +65,78 @@ public class FileAnalysisMain {
 	}
 
 	/**
-	 * Find the format of the file that we will be working upon.
+	 * Find the format of the file that we will be working upon, either
+	 * by guessing, or by asking the user.
 	 * 
-	 * @param fileFormat
 	 * @param file
 	 * @return
 	 */
-	private static FileFormat getFileFormat(String fileFormat, File file) {
-		return FileFormat.TSV;
+	private static FileFormat getFileFormat(File file) {
+		// extract file extension
+		String name = file.getName();
+		int index = name.indexOf('.');
+		if(index != -1) {
+			String extension = name.substring(index + 1);
+			
+			// now compare this extension with valid files
+			if("csv".equalsIgnoreCase(extension)) {
+				return FileFormat.CSV;
+			}
+			
+			if("tsv".equalsIgnoreCase(extension)) {
+				return FileFormat.TSV;
+			}
+			
+			if("pipe".equalsIgnoreCase(extension)) {
+				return FileFormat.Pipe;
+			}
+			
+			if("log4j".equalsIgnoreCase(extension)) {
+				return FileFormat.Log4j;
+			}
+			
+			if("logback".equalsIgnoreCase(extension)) {
+				return FileFormat.LogBack;
+			}
+			
+			System.out.println("Unable to detect file format from extension: " + name);
+		}
+		
+		
+		System.out.println("Valid file formats: csv, tsv, pipe, delim, httpd, log4j, logback");
+		String fileFormat = ConsoleUtils.readLine("Enter file format: ", true);
+		if(AssertUtils.isEmpty(fileFormat)) {
+			System.out.println("No file format specified... exiting!");
+			return null;
+		}
+		
+		return FileFormat.valueOf(fileFormat);
 	}
 
 	/**
-	 * Extract the filename that we need to work upon.
+	 * Ask the user for file that we need to work upon.
 	 * 
-	 * @param filePath
 	 * @return
 	 */
-	private static File getInputFile(String filePath) {
-		return new File("C:/users/sangupta/desktop/links.txt");
+	private static File getInputFile() {
+		String filePath = ConsoleUtils.readLine("Enter file path to be analyzed: ", true);
+		if(AssertUtils.isEmpty(filePath)) {
+			System.out.println("Nothing to do... exiting!");
+			return null;
+		}
+		
+		File file = new File(filePath);
+		if(!file.exists()) {
+			System.out.println("No such file exists... exiting!");
+			return null;
+		}
+		
+		if(!file.isFile()) {
+			System.out.println("Not a valid file... exiting!");
+			return null;
+		}
+		
+		return file;
 	}
 	
 }
