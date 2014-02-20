@@ -8,6 +8,14 @@ such as `CSV`, `tab-delimited`, `Apache HTTP Logs`, `Log4j`, `Logback` and other
 into an embedded disk persisted `H2 database`. Once the data is in, you can run
 proper SQL queries around the data and analyze them in a variety of ways.
 
+Features
+--------
+
+* Run SQL queries against structured data
+* Supports pagination during queries
+* Interactive tool
+* Plugin mechanism to add more file formats
+
 Inspiration
 -----------
 
@@ -16,7 +24,7 @@ and dumps and decipher information from them. Tools such as `Excel`, `splunk` et
 have never helped me do things faster, and thus, I always ended up writing code
 to do my tasks.
 
-Once, then I saw a small demo fo the tool `textql` at https://github.com/dinedal/textqlb
+I then saw a small demo video of the `textql` tool at https://github.com/dinedal/textqlb
 The concept of the tool was fantastic, push data into an in-memory SQL store and then
 run a query against the data.
 

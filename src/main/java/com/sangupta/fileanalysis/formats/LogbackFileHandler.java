@@ -30,6 +30,7 @@ import java.util.Date;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.LineIterator;
 
+import com.sangupta.fileanalysis.FileFormatHandler;
 import com.sangupta.fileanalysis.db.DBColumnType;
 import com.sangupta.fileanalysis.db.Database;
 import com.sangupta.fileanalysis.db.DatabaseTable;
@@ -38,6 +39,8 @@ import com.sangupta.jerry.util.ConsoleUtils;
 import com.sangupta.jerry.util.StringUtils;
 
 /**
+ * {@link FileFormatHandler} for working with <code>Logback</code> log file. Logback
+ * is an implementation to <code>slf4j</code>.
  * 
  * @author sangupta
  *
@@ -61,7 +64,6 @@ public class LogbackFileHandler extends AbstractFileFormatHandler {
 		try {
 			iterator = FileUtils.lineIterator(this.file);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

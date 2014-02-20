@@ -35,8 +35,6 @@ import com.sangupta.fileanalysis.db.DBColumn;
 import com.sangupta.fileanalysis.db.DBColumnType;
 import com.sangupta.fileanalysis.db.Database;
 import com.sangupta.fileanalysis.db.DatabaseTable;
-import com.sangupta.jerry.util.AssertUtils;
-import com.sangupta.jerry.util.ConsoleUtils;
 
 /**
  * 
@@ -103,17 +101,7 @@ public class ApacheLogFileHandler extends AbstractFileFormatHandler {
 			column = detectDBColumn(token, column);
 			if(column == null) {
 				// ask the user for column type
-				System.out.println("Valid column types: int, long, date, str, text");
-				String colNameType = ConsoleUtils.readLine("Column name and type for (" + token + "): ", true);
-				if(AssertUtils.isNotEmpty(colNameType)) {
-					String[] split = colNameType.split(",");
-					if(split.length == 2) {
-						String colName = split[0];
-						DBColumnType colType = DBColumnType.decipherColumnType(split[1]);
-						
-						column = new DBColumn(colName, colType);
-					}
-				}
+				column = getDBColumnFromUser(token);
 				
 				if(column == null) {
 					column = new DBColumn("col", DBColumnType.STRNG);

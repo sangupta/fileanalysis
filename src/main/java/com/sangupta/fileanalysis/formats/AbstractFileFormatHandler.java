@@ -24,9 +24,12 @@ package com.sangupta.fileanalysis.formats;
 import java.io.File;
 
 import com.sangupta.fileanalysis.FileFormatHandler;
+import com.sangupta.fileanalysis.db.DBColumn;
+import com.sangupta.fileanalysis.db.DBColumnType;
 import com.sangupta.fileanalysis.db.Database;
 import com.sangupta.fileanalysis.db.DatabaseTable;
 import com.sangupta.jerry.util.AssertUtils;
+import com.sangupta.jerry.util.ConsoleUtils;
 
 /**
  * 
@@ -35,10 +38,22 @@ import com.sangupta.jerry.util.AssertUtils;
  */
 public abstract class AbstractFileFormatHandler implements FileFormatHandler {
 	
+	/**
+	 * The database we are connected to
+	 */
 	protected Database database;
 
+	/**
+	 * The file we are working on
+	 */
 	protected File file;
 	
+	/**
+	 * Initialize 
+	 * 
+	 * @param database
+	 * @param file
+	 */
 	public void setDBAndFile(Database database, File file) {
 		this.database = database;
 		this.file = file;
@@ -53,6 +68,12 @@ public abstract class AbstractFileFormatHandler implements FileFormatHandler {
 		// do nothing
 	}
 	
+	/**
+	 * Insert data as a row into the database for the given table.
+	 * 
+	 * @param table
+	 * @param row
+	 */
 	protected void insertRow(DatabaseTable table, Object[] row) {
 		if(row == null) {
 			return;
@@ -81,5 +102,27 @@ public abstract class AbstractFileFormatHandler implements FileFormatHandler {
 		// insert the row
 		this.database.insertRecord(table, row);
 	}
-
+	
+	/**
+	 * Read {@link DBColumn} details from the command line.
+	 * 
+	 * @param token
+	 * @return
+	 */
+	protected DBColumn getDBColumnFromUser(String token) {
+		System.out.println("Valid column types: int, long, date, str, text");
+		String colNameType = ConsoleUtils.readLine("Column name and type for (" + token + "): ", true);
+		
+		if(AssertUtils.isNotEmpty(colNameType)) {
+			String[] split = colNameType.split(",");
+			if(split.length == 2) {
+				String colName = split[0];
+				DBColumnType colType = DBColumnType.decipherColumnType(split[1]);
+				
+				return new DBColumn(colName, colType);
+			}
+		}
+		
+		return null;
+	}
 }

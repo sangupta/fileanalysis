@@ -27,12 +27,18 @@ import com.sangupta.jerry.util.AssertUtils;
 import com.sangupta.jerry.util.ConsoleUtils;
 
 /**
+ * Command line interface to the {@link FileAnalysis} tool.
  * 
  * @author sangupta
  *
  */
 public class FileAnalysisMain {
 	
+	/**
+	 * Start the interactive tool.
+	 * 
+	 * @param args
+	 */
 	public static void main(String[] args) {
 		String filePath = ConsoleUtils.readLine("Enter file path to be analyzed: ", true);
 		if(AssertUtils.isEmpty(filePath)) {
@@ -58,8 +64,13 @@ public class FileAnalysisMain {
 		System.out.println("Checking parameters...");
 
 		// start the engine
-		FileAnalysis analysis = new FileAnalysis(file, format);
-		analysis.analyzeFile();
+		FileAnalysis analysis = null;
+		try {
+			analysis = new FileAnalysis(file, format);
+			analysis.analyzeFile();
+		} finally {
+			analysis.close();
+		}
 	}
 
 	/**

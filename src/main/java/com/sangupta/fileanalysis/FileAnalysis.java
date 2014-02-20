@@ -21,6 +21,7 @@
 
 package com.sangupta.fileanalysis;
 
+import java.io.Closeable;
 import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
@@ -41,7 +42,7 @@ import com.sangupta.jerry.util.ConsoleUtils;
  * @author sangupta
  *
  */
-public class FileAnalysis {
+public class FileAnalysis implements Closeable {
 	
 	/**
 	 * The database we are currently connected to
@@ -139,10 +140,15 @@ public class FileAnalysis {
 			});
 		} while(true);
 		
-		// close the database
-		database.closeDatabase();
-		
 		System.out.println("File Analysis complete.");
+	}
+	
+	@Override
+	public void close() {
+		// close the database
+		if(this.database != null) {
+			this.database.closeDatabase();
+		}
 	}
 	
 	/**
