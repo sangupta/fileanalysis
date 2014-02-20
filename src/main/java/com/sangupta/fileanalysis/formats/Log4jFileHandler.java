@@ -25,23 +25,21 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import com.sangupta.fileanalysis.FileFormatHandler;
 import com.sangupta.jerry.util.AssertUtils;
 
 /**
- * {@link FileFormatHandler} for working with <code>Logback</code> log file. Logback
- * is an implementation to <code>slf4j</code>.
+ * Handle <code>Apache log4j</code> log files.
  * 
  * @author sangupta
  *
  */
-public class LogbackFileHandler extends AbstractLogFileFormatHandler {
+public class Log4jFileHandler extends AbstractLogFileFormatHandler {
 	
-	public static final SimpleDateFormat LOGBACK_DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss,SSS");
+	public static final SimpleDateFormat LOG4J_DATE_FORMAT = new SimpleDateFormat("dd MMM yyyy hh:mm:ss,SSS");
 	
 	@Override
 	protected SimpleDateFormat getDateFormat() {
-		return LOGBACK_DATE_FORMAT;
+		return LOG4J_DATE_FORMAT;
 	}
 
 	@Override
@@ -50,26 +48,27 @@ public class LogbackFileHandler extends AbstractLogFileFormatHandler {
 			return;
 		}
 		
-		int start = line.indexOf(' ');
-		start = line.indexOf(' ', start + 1);
+		int start = line.indexOf('[');
 		
-		String dateStr = line.substring(0, start);
+		String dateStr = line.substring(0, start).trim();
 		try {
-			record.date = LOGBACK_DATE_FORMAT.parse(dateStr);
+			record.date = LOG4J_DATE_FORMAT.parse(dateStr);
 		} catch(ParseException e) {
 			// eat up
 		}
 		
-		int end = line.indexOf(' ', start + 1);
-		record.level = line.substring(start + 1, end);
+		int end = line.indexOf(']', start + 1);
+		record.thread = line.substring(start + 1, end);
+		
+		// find separator
+		start = end;
+		start = line.indexOf("[:] ", start);
+		end = line.indexOf(' ', start + 4);
+		record.level = line.substring(start + 3, end);
 		
 		start = end;
-		end = line.indexOf(']', end);
-		record.thread = line.substring(line.indexOf('[', start) + 1, end);
-		
-		start = end;
-		end = line.indexOf(']', end + 1);
-		record.clazz = line.substring(line.indexOf('[', start) + 1, end);
+		end = line.indexOf(" - ", end + 1);
+		record.clazz = line.substring(start + 1, end);
 		
 		start = end;
 		end = line.indexOf('\n', end + 1);
@@ -85,49 +84,30 @@ public class LogbackFileHandler extends AbstractLogFileFormatHandler {
 		}
 	}
 
-	/**
-	 * Check if this line is a valid log line.
-	 * 
-	 * @param segment
-	 * @return
-	 */
+	@Override
+	protected boolean isSkipLine(String line) {
+		return false;
+	}
+
 	@Override
 	protected boolean isNewLogLine(String segment) {
 		return extractDate(segment) == null ? false : true;
 	}
-	
-	/**
-	 * 
-	 * @param segment
-	 * @return
-	 */
+
 	private Date extractDate(String segment) {
-		int space = segment.indexOf(' ');
-		if(space == -1) {
+		int start = segment.indexOf('[');
+		if(start == -1) {
 			return null;
 		}
 		
-		space = segment.indexOf(' ', space + 1);
-		if(space == -1) {
-			return null;
-		}
-		
-		String date = segment.substring(0, space);
+		String dateStr = segment.substring(0, start).trim();
 		try {
-			return getDateFormat().parse(date);
+			return LOG4J_DATE_FORMAT.parse(dateStr);
 		} catch(ParseException e) {
+			// eat up
 		}
 		
 		return null;
-	}
-	
-	@Override
-	protected boolean isSkipLine(String line) {
-		if(line.startsWith("#logback.classic pattern:")) {
-			return true;
-		}
-		
-		return false;
 	}
 
 }

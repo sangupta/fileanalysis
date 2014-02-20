@@ -81,7 +81,7 @@ public class FileAnalysisMain {
 	 * @return
 	 */
 	private static FileFormat getFileFormat(String fileFormat, File file) {
-		return FileFormat.LogBack;
+		return FileFormat.Log4j;
 	}
 
 	/**
@@ -91,7 +91,7 @@ public class FileAnalysisMain {
 	 * @return
 	 */
 	private static File getInputFile(String filePath) {
-		return new File("c:/users/sangupta/desktop/jobsearch.log");
+		return new File("C:/adobe-forums20/target/jiveHome/logs/sbs.log");
 	}
 	
 }

@@ -24,6 +24,7 @@ package com.sangupta.fileanalysis;
 import com.sangupta.fileanalysis.formats.ApacheLogFileHandler;
 import com.sangupta.fileanalysis.formats.CSVFileHandler;
 import com.sangupta.fileanalysis.formats.DoNothingHandler;
+import com.sangupta.fileanalysis.formats.Log4jFileHandler;
 import com.sangupta.fileanalysis.formats.LogbackFileHandler;
 
 /**
@@ -53,7 +54,7 @@ public enum FileFormat {
 				return new ApacheLogFileHandler();
 				
 			case Log4j:
-				break;
+				return new Log4jFileHandler();
 				
 			case LogBack:
 				return new LogbackFileHandler();
