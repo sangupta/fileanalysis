@@ -19,7 +19,7 @@
  * 
  */
 
-package com.sangupta.fileanalysis.formats.base;
+package com.sangupta.fileanalysis.formats;
 
 import java.io.File;
 import java.io.IOException;
@@ -35,6 +35,7 @@ import com.sangupta.fileanalysis.db.DBColumn;
 import com.sangupta.fileanalysis.db.DBColumnType;
 import com.sangupta.fileanalysis.db.Database;
 import com.sangupta.fileanalysis.db.DatabaseTable;
+import com.sangupta.fileanalysis.formats.base.AbstractFileFormatHandler;
 
 /**
  * 

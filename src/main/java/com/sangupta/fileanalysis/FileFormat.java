@@ -21,11 +21,11 @@
 
 package com.sangupta.fileanalysis;
 
+import com.sangupta.fileanalysis.formats.ApacheLogFileHandler;
 import com.sangupta.fileanalysis.formats.CSVFileHandler;
 import com.sangupta.fileanalysis.formats.Log4jFileHandler;
 import com.sangupta.fileanalysis.formats.LogbackFileHandler;
 import com.sangupta.fileanalysis.formats.TSVFileHandler;
-import com.sangupta.fileanalysis.formats.base.ApacheLogFileHandler;
 import com.sangupta.fileanalysis.formats.base.DoNothingHandler;
 
 /**
