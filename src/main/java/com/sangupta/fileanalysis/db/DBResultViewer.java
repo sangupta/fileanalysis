@@ -109,9 +109,11 @@ public class DBResultViewer {
 		
 		// start iterating over the result set
 		int rowsDisplayed = 0;
+		int numRecords = 0;
 		while (resultSet.next()) {
 			// read and display the value
 			rowsDisplayed++;
+			numRecords++;
 			
 			for(int index = 1; index <= numColumns; index++) {
 				switch(colType[index]) {
@@ -156,6 +158,8 @@ public class DBResultViewer {
 				continue;
 			}
 		}
+		
+		System.out.println("\nTotal number of records found: " + numRecords);
 	}
 
 	private void format(Timestamp timestamp, int size) {
