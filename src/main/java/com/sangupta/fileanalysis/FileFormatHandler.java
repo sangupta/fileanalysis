@@ -1,7 +1,7 @@
 /**
  *
  * FileAnalysis - SQLize files to analyze dumps and logs
- * Copyright (c) 2014, Sandeep Gupta
+ * Copyright (c) 2014-2015, Sandeep Gupta
  * 
  * http://sangupta.com/projects/fileanalysis
  * 
