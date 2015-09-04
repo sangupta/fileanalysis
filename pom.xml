@@ -94,6 +94,13 @@
 			<artifactId>opencsv</artifactId>
 			<version>2.3</version>
 		</dependency>
+		
+		<!-- output no logs -->
+		<dependency>
+		    <groupId>org.slf4j</groupId>
+		    <artifactId>slf4j-nop</artifactId>
+		    <version>1.7.12</version>
+		</dependency>
 	</dependencies>
 
 	<build>
