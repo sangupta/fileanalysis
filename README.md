@@ -16,6 +16,7 @@ Features
 * Interactive tool
 * Plugin mechanism to add more file formats
 * Automatic detection of column data-types using heuristic
+* Column names are picked up using the header row
 
 Usage
 -----
@@ -51,8 +52,69 @@ Following are some samples of the same.
 The database TABLE created from the file is `DATA`.
 
 ```
-fa-query $ 
+fa-query $ select * from data;
+|       LINENUM        |               STREET                |      CITY       |  ZIP  | STATE | BEDS | BATHS | SQFT |     TYPE     |          SALE_DATE           | PRICE  | LATITUDE  |  LONGITUDE  |
++----------------------+-------------------------------------+-----------------+-------+----+---+---+------+--------------+------------------------------+--------+-----------+-------------+
+|                  1.0 | 3526 HIGH ST                        | SACRAMENTO      | 95838.0 | CA | 2.0 | 1.0 | 836.0 | Residential  | Wed May 21 00:00:00 EDT 2008 | 59222.0 | 38.631913 | -121.434879 |
+|                  2.0 | 51 OMAHA CT                         | SACRAMENTO      | 95823.0 | CA | 3.0 | 1.0 | 1167.0 | Residential  | Wed May 21 00:00:00 EDT 2008 | 68212.0 | 38.478902 | -121.431028 |
+|                  3.0 | 2796 BRANCH ST                      | SACRAMENTO      | 95815.0 | CA | 2.0 | 1.0 | 796.0 | Residential  | Wed May 21 00:00:00 EDT 2008 | 68880.0 | 38.618305 | -121.443839 |
+...
+
+Type "it" for more: no
+
+Total number of records found: 60
 ``` 
+
+By default 20 rows of data are shown. To view more and run the cursor forward, type `it` on the prompt.
+
+
+```
+fa-query $ select distinct(city) from data;
+|      CITY       |
++-----------------+
+| FORESTHILL      |
+| GALT            |
+| WEST SACRAMENTO |
+| RANCHO CORDOVA  |
+| ELVERTA         |
+| GARDEN VALLEY   |
+| NORTH HIGHLANDS |
+| ROCKLIN         |
+| GOLD RIVER      |
+| CITRUS HEIGHTS  |
+| CAMERON PARK    |
+| EL DORADO HILLS |
+| FOLSOM          |
+| MEADOW VISTA    |
+| MATHER          |
+| FAIR OAKS       |
+| WILTON          |
+| DIAMOND SPRINGS |
+| GRANITE BAY     |
+| RANCHO MURIETA  |
+Type "it" for more: it
+| WALNUT GROVE    |
+| ROSEVILLE       |
+| AUBURN          |
+| RIO LINDA       |
+| PLACERVILLE     |
+| COOL            |
+| LOOMIS          |
+| SHINGLE SPRINGS |
+| SACRAMENTO      |
+| PENRYN          |
+| GREENWOOD       |
+| ORANGEVALE      |
+| CARMICHAEL      |
+| ANTELOPE        |
+| ELK GROVE       |
+| POLLOCK PINES   |
+| EL DORADO       |
+| LINCOLN         |
+| SLOUGHHOUSE     |
+
+Total number of records found: 39
+```
 
 Inspiration
 -----------
