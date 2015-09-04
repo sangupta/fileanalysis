@@ -47,9 +47,36 @@ Loaded data in 142 millis.
 ```
 
 Once file laod is complete, you will receive a prompt for `fa-query $` where you can fire some queries.
-Following are some samples of the same.
+Following are some samples of the same. To exit the prompt, use any of the command like `quit` or `exit`.
 
 The database TABLE created from the file is `DATA`.
+
+To see what columns were created:
+
+```
+fa-query $ show columns from data;
+
+|      FIELD        |     TYPE        |   NULL  | KEY | DEFAULT                                                                      |
++-------------------+----------------------------------------------------------------------------------------------------------------+
+| LINENUM           | BIGINT(19)      | NO      |     | (NEXT VALUE FOR PUBLIC.SYSTEM_SEQUENCE_B6F69071_349E_46D1_AADC_D4441A24EB14) |
+| STREET            | VARCHAR(255)    | YES     |     | NULL                                                                         |
+| CITY              | VARCHAR(255)    | YES     |     | NULL                                                                         |
+| ZIP               | BIGINT(19)      | YES     |     | NULL                                                                         |
+| STATE             | VARCHAR(255)    | YES     |     | NULL                                                                         |
+| BEDS              | BIGINT(19)      | YES     |     | NULL                                                                         |
+| BATHS             | BIGINT(19)      | YES     |     | NULL                                                                         |
+| SQFT              | BIGINT(19)      | YES     |     | NULL                                                                         |
+| TYPE              | VARCHAR(255)    | YES     |     | NULL                                                                         |
+| SALE_DATE         | VARCHAR(255)    | YES     |     | NULL                                                                         |
+| PRICE             | BIGINT(19)      | YES     |     | NULL                                                                         |
+| LATITUDE          | DOUBLE(17)      | YES     |     | NULL                                                                         |
+| LONGITUDE         | DOUBLE(17)      | YES     |     | NULL                                                                         |
+
+Total number of records found: 13
+```
+
+
+To view all data:
 
 ```
 fa-query $ select * from data;
