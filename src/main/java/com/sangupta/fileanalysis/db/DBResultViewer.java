@@ -148,11 +148,12 @@ public class DBResultViewer {
 			// check for rows displayed
 			if(rowsDisplayed == 20) {
 				// ask the user if more data needs to be displayed
-				String cont = ConsoleUtils.readLine("Type \"it\" for more: ", true);
+				String cont = ConsoleUtils.readLine("\nType \"it\" for more: ", true);
 				if(!"it".equalsIgnoreCase(cont)) {
 					break;
 				}
 				
+				System.out.println();
 				// continue;
 				rowsDisplayed = 0;
 				continue;
