@@ -28,11 +28,13 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
 import java.sql.Types;
+import java.util.Arrays;
 import java.util.Date;
 
 import org.apache.commons.lang3.StringUtils;
 
 import com.sangupta.fileanalysis.FileAnalysisHelper;
+import com.sangupta.jerry.print.ConsoleTable;
 import com.sangupta.jerry.util.ConsoleUtils;
 
 /**
@@ -89,28 +91,26 @@ public class DBResultViewer {
 		ResultSetMetaData meta = resultSet.getMetaData();
 		
 		final int numColumns = meta.getColumnCount();
-		final int[] displaySizes = new int[numColumns + 1];
 		final int[] colType = new int[numColumns + 1];
 		
-		for(int index = 1; index <= numColumns; index++) {
-			colType[index] = meta.getColumnType(index);
-			displaySizes[index] = getColumnSize(meta.getTableName(index), meta.getColumnName(index), colType[index]);
-		}
+		String[] columns = new String[numColumns];
 		
 		// display the header row
 		for(int index = 1; index <= numColumns; index++) {
-			center(meta.getColumnLabel(index), displaySizes[index]);
+			colType[index] = meta.getColumnType(index);
+			columns[index - 1] = meta.getColumnLabel(index);
 		}
-		System.out.println("|");
-		for(int index = 1; index <= numColumns; index++) {
-			System.out.print("+" + StringUtils.repeat('-', displaySizes[index] + 2));
-		}
-		System.out.println("+");
+		final String[] headers = Arrays.copyOf(columns, columns.length);
 		
 		// start iterating over the result set
 		int rowsDisplayed = 0;
 		int numRecords = 0;
+		ConsoleTable table = new ConsoleTable();
+		table.addHeaderRow(headers);
 		while (resultSet.next()) {
+			// clean up columns
+			Arrays.fill(columns, "");
+			
 			// read and display the value
 			rowsDisplayed++;
 			numRecords++;
@@ -120,44 +120,53 @@ public class DBResultViewer {
 					case Types.DECIMAL:
 					case Types.DOUBLE:
 					case Types.REAL:
-						format(resultSet.getDouble(index), displaySizes[index]);
+						columns[index - 1] = String.valueOf(resultSet.getDouble(index));
 						continue;
 						
 					case Types.INTEGER:
 					case Types.SMALLINT:
-						format(resultSet.getInt(index), displaySizes[index]);
+						columns[index - 1] = String.valueOf(resultSet.getInt(index));
 						continue;
 						
 					case Types.VARCHAR:
-						format(resultSet.getString(index), displaySizes[index], false);
+						columns[index - 1] = resultSet.getString(index);
 						continue;
 						
 					case Types.TIMESTAMP:
-						format(resultSet.getTimestamp(index), displaySizes[index]);
+						columns[index - 1] = String.valueOf(resultSet.getTimestamp(index));
 						continue;
 
 					case Types.BIGINT:
-						format(resultSet.getBigDecimal(index), displaySizes[index]);
+						columns[index - 1] = resultSet.getBigDecimal(index).toString();
 						continue;
 				}
 			}
-			
-			// terminator for row and new line
-			System.out.println("|");
+			table.addRow((Object[]) columns);
 			
 			// check for rows displayed
 			if(rowsDisplayed == 20) {
+				// display rows
+				table.write(System.out);
+				
 				// ask the user if more data needs to be displayed
 				String cont = ConsoleUtils.readLine("\nType \"it\" for more: ", true);
 				if(!"it".equalsIgnoreCase(cont)) {
+					table = null;
 					break;
 				}
 				
 				System.out.println();
+				
 				// continue;
 				rowsDisplayed = 0;
+				table = new ConsoleTable();
+				table.addHeaderRow(headers);
 				continue;
 			}
+		}
+		
+		if(table != null) {
+			table.write(System.out);
 		}
 		
 		System.out.println("\nTotal number of records found: " + numRecords);
