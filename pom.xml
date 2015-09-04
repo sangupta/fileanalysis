@@ -97,6 +97,7 @@
 	</dependencies>
 
 	<build>
+		<finalName>fileanalysis</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -108,69 +109,35 @@
 				</configuration>
 			</plugin>
 			
-			<!-- Generate the project-javadoc.jar for OSS repository -->
+			<!-- create a shaded jar -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-javadoc-plugin</artifactId>
-				<version>2.9.1</version>
+				<artifactId>maven-shade-plugin</artifactId>
+				<version>2.3</version>
 				<configuration>
-					<detectOfflineLinks>false</detectOfflineLinks>
-					<breakiterator>true</breakiterator>
-					<version>false</version>
-					<author>false</author>
-					<keywords>true</keywords>
+					<!-- put your configurations here -->
 				</configuration>
-			</plugin>
-
-			<!-- Generate the project-sources.jar for OSS repository -->
-			<plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-source-plugin</artifactId>
-                <version>2.2.1</version>
 				<executions>
-					<!-- ~ This workaround prevents Maven from executing the 'generate-sources' 
-						phase twice. ~ See http://jira.codehaus.org/browse/MSOURCES-13 ~ and http://blog.peterlynch.ca/2010/05/maven-how-to-prevent-generate-sources.html -->
 					<execution>
-						<id>attach-sources</id>
-						<phase>invalid</phase>
-						<goals>
-							<goal>jar</goal>
-						</goals>
-					</execution>
-					<execution>
-						<id>attach-sources-no-fork</id>
 						<phase>package</phase>
 						<goals>
-							<goal>jar-no-fork</goal>
+							<goal>shade</goal>
 						</goals>
+						<configuration>
+							<transformers>
+								<transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+									<mainClass>com.sangupta.fileanalysis.FileAnalysisMain</mainClass>
+									<manifestEntries>
+										<Implementation-Title>${project.name}</Implementation-Title>
+										<Implementation-Version>${project.version}</Implementation-Version>
+									</manifestEntries>
+								</transformer>
+							</transformers>
+						</configuration>
 					</execution>
 				</executions>
-            </plugin>
+			</plugin>
 		</plugins>
 	</build>
 
-	<profiles>
-		<profile>
-			<id>release</id>	
-			<build>
-				<plugins>
-					<!-- Sign the Maven artifacts -->
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-gpg-plugin</artifactId>
-						<executions>
-							<execution>
-								<id>sign-artifacts</id>
-								<phase>verify</phase>
-								<goals>
-									<goal>sign</goal>
-								</goals>
-							</execution>
-						</executions>
-					</plugin>			
-				</plugins>
-			</build>
-		</profile>
-	</profiles>
-	
 </project>
