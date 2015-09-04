@@ -46,50 +46,65 @@ Populating data...
 Loaded data in 142 millis.
 ```
 
-Once file laod is complete, you will receive a prompt for `fa-query $` where you can fire some queries.
+Once file load is complete, you will receive a prompt for `fa-query $` where you can fire some queries.
 Following are some samples of the same. To exit the prompt, use any of the command like `quit` or `exit`.
 
-The database TABLE created from the file is `DATA`.
+The database `TABLE` created from the file is dependent on the format:
+
+For CSV, Pipe-delimited, Tab-delimited, custom-delimited file: DATA
+For Apache, Log4j, Logback: LOGS
 
 To see what columns were created:
 
 ```
 fa-query $ show columns from data;
-
-|      FIELD        |     TYPE        |   NULL  | KEY | DEFAULT                                                                      |
-+-------------------+----------------------------------------------------------------------------------------------------------------+
-| LINENUM           | BIGINT(19)      | NO      |     | (NEXT VALUE FOR PUBLIC.SYSTEM_SEQUENCE_B6F69071_349E_46D1_AADC_D4441A24EB14) |
-| STREET            | VARCHAR(255)    | YES     |     | NULL                                                                         |
-| CITY              | VARCHAR(255)    | YES     |     | NULL                                                                         |
-| ZIP               | BIGINT(19)      | YES     |     | NULL                                                                         |
-| STATE             | VARCHAR(255)    | YES     |     | NULL                                                                         |
-| BEDS              | BIGINT(19)      | YES     |     | NULL                                                                         |
-| BATHS             | BIGINT(19)      | YES     |     | NULL                                                                         |
-| SQFT              | BIGINT(19)      | YES     |     | NULL                                                                         |
-| TYPE              | VARCHAR(255)    | YES     |     | NULL                                                                         |
-| SALE_DATE         | VARCHAR(255)    | YES     |     | NULL                                                                         |
-| PRICE             | BIGINT(19)      | YES     |     | NULL                                                                         |
-| LATITUDE          | DOUBLE(17)      | YES     |     | NULL                                                                         |
-| LONGITUDE         | DOUBLE(17)      | YES     |     | NULL                                                                         |
+ | FIELD     | TYPE         | NULL | KEY | DEFAULT                                                                     
+ | --------- | ------------ | ---- | --- | ----------------------------------------------------------------------------
+ | LINENUM   | BIGINT(19)   | NO   |     | (NEXT VALUE FOR PUBLIC.SYSTEM_SEQUENCE_6C6A0A9C_6162_4500_9526_64DA8B5E8B53)
+ | STREET    | VARCHAR(255) | YES  |     | NULL                                                                        
+ | CITY      | VARCHAR(255) | YES  |     | NULL                                                                        
+ | ZIP       | BIGINT(19)   | YES  |     | NULL                                                                        
+ | STATE     | VARCHAR(255) | YES  |     | NULL                                                                        
+ | BEDS      | BIGINT(19)   | YES  |     | NULL                                                                        
+ | BATHS     | BIGINT(19)   | YES  |     | NULL                                                                        
+ | SQFT      | BIGINT(19)   | YES  |     | NULL                                                                        
+ | TYPE      | VARCHAR(255) | YES  |     | NULL                                                                        
+ | SALE_DATE | VARCHAR(255) | YES  |     | NULL                                                                        
+ | PRICE     | BIGINT(19)   | YES  |     | NULL                                                                        
+ | LATITUDE  | DOUBLE(17)   | YES  |     | NULL                                                                        
+ | LONGITUDE | DOUBLE(17)   | YES  |     | NULL                                                                        
 
 Total number of records found: 13
 ```
-
 
 To view all data:
 
 ```
 fa-query $ select * from data;
-|       LINENUM        |               STREET                |      CITY       |  ZIP  | STATE | BEDS | BATHS | SQFT |     TYPE     |          SALE_DATE           | PRICE  | LATITUDE  |  LONGITUDE  |
-+----------------------+-------------------------------------+-----------------+-------+----+---+---+------+--------------+------------------------------+--------+-----------+-------------+
-|                  1.0 | 3526 HIGH ST                        | SACRAMENTO      | 95838.0 | CA | 2.0 | 1.0 | 836.0 | Residential  | Wed May 21 00:00:00 EDT 2008 | 59222.0 | 38.631913 | -121.434879 |
-|                  2.0 | 51 OMAHA CT                         | SACRAMENTO      | 95823.0 | CA | 3.0 | 1.0 | 1167.0 | Residential  | Wed May 21 00:00:00 EDT 2008 | 68212.0 | 38.478902 | -121.431028 |
-|                  3.0 | 2796 BRANCH ST                      | SACRAMENTO      | 95815.0 | CA | 2.0 | 1.0 | 796.0 | Residential  | Wed May 21 00:00:00 EDT 2008 | 68880.0 | 38.618305 | -121.443839 |
-...
+ | LINENUM | STREET                          | CITY           | ZIP   | STATE | BEDS | BATHS | SQFT | TYPE        | SALE_DATE                    | PRICE  | LATITUDE  | LONGITUDE  
+ | ------- | ------------------------------- | -------------- | ----- | ----- | ---- | ----- | ---- | ----------- | ---------------------------- | ------ | --------- | -----------
+ | 1       | 3526 HIGH ST                    | SACRAMENTO     | 95838 | CA    | 2    | 1     | 836  | Residential | Wed May 21 00:00:00 EDT 2008 | 59222  | 38.631913 | -121.434879
+ | 2       | 51 OMAHA CT                     | SACRAMENTO     | 95823 | CA    | 3    | 1     | 1167 | Residential | Wed May 21 00:00:00 EDT 2008 | 68212  | 38.478902 | -121.431028
+ | 3       | 2796 BRANCH ST                  | SACRAMENTO     | 95815 | CA    | 2    | 1     | 796  | Residential | Wed May 21 00:00:00 EDT 2008 | 68880  | 38.618305 | -121.443839
+ | 4       | 2805 JANETTE WAY                | SACRAMENTO     | 95815 | CA    | 2    | 1     | 852  | Residential | Wed May 21 00:00:00 EDT 2008 | 69307  | 38.616835 | -121.439146
+ | 5       | 6001 MCMAHON DR                 | SACRAMENTO     | 95824 | CA    | 2    | 1     | 797  | Residential | Wed May 21 00:00:00 EDT 2008 | 81900  | 38.51947  | -121.435768
+ | 6       | 5828 PEPPERMILL CT              | SACRAMENTO     | 95841 | CA    | 3    | 1     | 1122 | Condo       | Wed May 21 00:00:00 EDT 2008 | 89921  | 38.662595 | -121.327813
+ | 7       | 6048 OGDEN NASH WAY             | SACRAMENTO     | 95842 | CA    | 3    | 2     | 1104 | Residential | Wed May 21 00:00:00 EDT 2008 | 90895  | 38.681659 | -121.351705
+ | 8       | 2561 19TH AVE                   | SACRAMENTO     | 95820 | CA    | 3    | 1     | 1177 | Residential | Wed May 21 00:00:00 EDT 2008 | 91002  | 38.535092 | -121.481367
+ | 9       | 11150 TRINITY RIVER DR Unit 114 | RANCHO CORDOVA | 95670 | CA    | 2    | 2     | 941  | Condo       | Wed May 21 00:00:00 EDT 2008 | 94905  | 38.621188 | -121.270555
+ | 10      | 7325 10TH ST                    | RIO LINDA      | 95673 | CA    | 3    | 2     | 1146 | Residential | Wed May 21 00:00:00 EDT 2008 | 98937  | 38.700909 | -121.442979
+ | 11      | 645 MORRISON AVE                | SACRAMENTO     | 95838 | CA    | 3    | 2     | 909  | Residential | Wed May 21 00:00:00 EDT 2008 | 100309 | 38.637663 | -121.45152 
+ | 12      | 4085 FAWN CIR                   | SACRAMENTO     | 95823 | CA    | 3    | 2     | 1289 | Residential | Wed May 21 00:00:00 EDT 2008 | 106250 | 38.470746 | -121.458918
+ | 13      | 2930 LA ROSA RD                 | SACRAMENTO     | 95815 | CA    | 1    | 1     | 871  | Residential | Wed May 21 00:00:00 EDT 2008 | 106852 | 38.618698 | -121.435833
+ | 14      | 2113 KIRK WAY                   | SACRAMENTO     | 95822 | CA    | 3    | 1     | 1020 | Residential | Wed May 21 00:00:00 EDT 2008 | 107502 | 38.482215 | -121.492603
+ | 15      | 4533 LOCH HAVEN WAY             | SACRAMENTO     | 95842 | CA    | 2    | 2     | 1022 | Residential | Wed May 21 00:00:00 EDT 2008 | 108750 | 38.672914 | -121.35934 
+ | 16      | 7340 HAMDEN PL                  | SACRAMENTO     | 95842 | CA    | 2    | 2     | 1134 | Condo       | Wed May 21 00:00:00 EDT 2008 | 110700 | 38.700051 | -121.351278
+ | 17      | 6715 6TH ST                     | RIO LINDA      | 95673 | CA    | 2    | 1     | 844  | Residential | Wed May 21 00:00:00 EDT 2008 | 113263 | 38.689591 | -121.452239
+ | 18      | 6236 LONGFORD DR Unit 1         | CITRUS HEIGHTS | 95621 | CA    | 2    | 1     | 795  | Condo       | Wed May 21 00:00:00 EDT 2008 | 116250 | 38.679776 | -121.314089
+ | 19      | 250 PERALTA AVE                 | SACRAMENTO     | 95833 | CA    | 2    | 1     | 588  | Residential | Wed May 21 00:00:00 EDT 2008 | 120000 | 38.612099 | -121.469095
+ | 20      | 113 LEEWILL AVE                 | RIO LINDA      | 95673 | CA    | 3    | 2     | 1356 | Residential | Wed May 21 00:00:00 EDT 2008 | 121630 | 38.689999 | -121.46322 
 
-Type "it" for more: no
-
-Total number of records found: 60
+Type "it" for more:
 ``` 
 
 By default 20 rows of data are shown. To view more and run the cursor forward, type `it` on the prompt.
