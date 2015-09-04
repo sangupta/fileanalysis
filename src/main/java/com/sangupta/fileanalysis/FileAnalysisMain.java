@@ -52,13 +52,16 @@ public class FileAnalysisMain {
 		}
 		
 		// check the validity of the parameters
-		System.out.println("Checking parameters...");
+		System.out.println("\nChecking parameters...");
 
 		// start the engine
 		FileAnalysis analysis = null;
 		try {
 			analysis = new FileAnalysis(file, format);
 			analysis.analyzeFile();
+		} catch(Exception e) {
+			System.out.println("Error analyzing file... exiting!");
+			e.printStackTrace();
 		} finally {
 			analysis.close();
 		}
