@@ -15,6 +15,44 @@ Features
 * Supports pagination during queries
 * Interactive tool
 * Plugin mechanism to add more file formats
+* Automatic detection of column data-types using heuristic
+
+Usage
+-----
+
+To build take a checkout of the code, and build using:
+
+```
+$ mvn clean package
+```
+
+Run the tool via:
+
+```
+$ java -jar target/fileanalysis.jar
+```
+
+The workflow to run some queries against the `demo/real-estate.csv` file are as under:
+
+```
+$ java -jar target/fileanalysis.jar
+
+Enter file path to be analyzed: demo/real-estate.csv
+Checking parameters...
+Reading configuration...
+Creating required tables...
+Populating data...
+Loaded data in 142 millis.
+```
+
+Once file laod is complete, you will receive a prompt for `fa-query $` where you can fire some queries.
+Following are some samples of the same.
+
+The database TABLE created from the file is `DATA`.
+
+```
+fa-query $ 
+``` 
 
 Inspiration
 -----------
