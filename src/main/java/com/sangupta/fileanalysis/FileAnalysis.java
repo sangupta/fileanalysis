@@ -30,6 +30,7 @@ import java.sql.Statement;
 import com.sangupta.fileanalysis.db.DBResultViewer;
 import com.sangupta.fileanalysis.db.Database;
 import com.sangupta.fileanalysis.db.SQLStatementConsumer;
+import com.sangupta.jerry.print.ConsoleTable;
 import com.sangupta.jerry.util.AssertUtils;
 import com.sangupta.jerry.util.ConsoleUtils;
 import com.sangupta.jerry.util.StringUtils;
@@ -121,6 +122,11 @@ public class FileAnalysis implements Closeable {
 				continue;
 			}
 			
+			if("help".equalsIgnoreCase(query)) {
+				showHelp();
+				continue;
+			}
+			
 			if("desc".equalsIgnoreCase(query)) {
 				System.out.println("Use SHOW COLUMNS FROM DATA instead.\n");
 				query = "show columns from data;";
@@ -171,6 +177,22 @@ public class FileAnalysis implements Closeable {
 		} while(true);
 		
 		System.out.println("File Analysis complete.");
+	}
+
+	private void showHelp() {
+		ConsoleTable table = new ConsoleTable();
+		
+		table.addHeaderRow("Command", "Description");
+		table.addRow("count", "Show number of items in the dataset");
+		table.addRow("data", "Show all data from default DATA table in a paginated way");
+		table.addRow("desc", "Describe the default DATA table structure");
+		table.addRow("exit", "Exit the FA console");
+		table.addRow("export", "Export the data in one of CSV, XML, JSON format");
+		table.addRow("help", "Show this help screen");
+		table.addRow("quit", "Exit the FA console");
+		table.addRow("tables", "Show a list of all tables that were created");
+		
+		table.write(System.out);
 	}
 
 	private void doExport(String query) {
