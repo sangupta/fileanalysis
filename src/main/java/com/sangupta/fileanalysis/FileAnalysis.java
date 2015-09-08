@@ -120,6 +120,16 @@ public class FileAnalysis implements Closeable {
 				continue;
 			}
 			
+			if("desc".equalsIgnoreCase(query)) {
+				System.out.println("Use SHOW COLUMNS FROM TABLE_NAME instead.\n");
+				query = "show columns from data;";
+			}
+			
+			if("tables".equalsIgnoreCase(query)) {
+				System.out.println("Use SHOW TABLES instead.\n");
+				query = "show tables;";
+			}
+			
 			if("exit".equalsIgnoreCase(query)) {
 				break;
 			}

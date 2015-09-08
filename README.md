@@ -54,6 +54,17 @@ The database `TABLE` created from the file is dependent on the format:
 For CSV, Pipe-delimited, Tab-delimited, custom-delimited file: DATA
 For Apache, Log4j, Logback: LOGS
 
+To see what all tables were created:
+
+```
+ | TABLE_NAME   | TABLE_SCHEMA
+ | ------------ | ------------
+ | DATA         | PUBLIC      
+ | FA_COL_SIZES | PUBLIC      
+
+Total number of records found: 2
+```
+
 To see what columns were created:
 
 ```
