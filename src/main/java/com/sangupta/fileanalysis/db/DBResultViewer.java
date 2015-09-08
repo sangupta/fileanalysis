@@ -21,19 +21,13 @@
 
 package com.sangupta.fileanalysis.db;
 
-import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.sql.Timestamp;
 import java.sql.Types;
 import java.util.Arrays;
-import java.util.Date;
 
-import org.apache.commons.lang3.StringUtils;
-
-import com.sangupta.fileanalysis.FileAnalysisHelper;
 import com.sangupta.jerry.print.ConsoleTable;
 import com.sangupta.jerry.util.ConsoleUtils;
 
@@ -46,7 +40,7 @@ import com.sangupta.jerry.util.ConsoleUtils;
  */
 public class DBResultViewer {
 	
-	private Database database;
+	protected Database database;
 	
 	public DBResultViewer(Database db) {
 		this.database = db;
@@ -169,73 +163,7 @@ public class DBResultViewer {
 			table.write(System.out);
 		}
 		
-		System.out.println("\nTotal number of records found: " + numRecords);
+		System.out.println("\nTotal number of rows displayed: " + numRecords);
 	}
 
-	private void format(Timestamp timestamp, int size) {
-		if(timestamp == null) {
-			format((String) null, size, true);
-			return;
-		}
-		
-		long l = timestamp.getTime();
-		Date d = new Date(l);
-		format(FileAnalysisHelper.LOG_DATE_FORMAT.format(d), size, false);
-	}
-
-	private int getColumnSize(final String tableName, final String columnName, final int columnType) {
-		// check if we have the value in database cache
-		int size = database.getColSize(tableName, columnName);
-		if(size > 0) {
-			return size;
-		}
-		
-		switch(columnType) {
-			case Types.VARCHAR:
-				return 255;
-				
-			case Types.INTEGER:
-				return 10;
-				
-			case Types.BOOLEAN:
-				return 3;
-				
-			case Types.DOUBLE:
-				return 14;
-				
-			case Types.BIGINT:
-				return 20;
-				
-			case Types.TIMESTAMP:
-				return 26;
-		}
-		
-		return 10;
-	}
-
-	private static void format(double value, int size) {
-		format(String.valueOf(value), size, true);
-	}
-
-	private static void format(int value, int size) {
-		format(String.valueOf(value), size, true);
-	}
-
-	private void format(BigDecimal bigDecimal, int size) {
-		format(bigDecimal.longValue(), size);
-	}
-
-	private static void center(String value, int size) {
-		System.out.print("| " + StringUtils.center(value, size) + " ");
-	}
-
-	private static void format(String value, int size, boolean rightAligned) {
-		if(rightAligned) {
-			value = StringUtils.leftPad(value, size);
-		} else {
-			value = StringUtils.rightPad(value, size);
-		}
-		
-		System.out.print("| " + value + " ");
-	}
 }
