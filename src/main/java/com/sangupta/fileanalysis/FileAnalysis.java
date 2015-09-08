@@ -32,6 +32,7 @@ import com.sangupta.fileanalysis.db.Database;
 import com.sangupta.fileanalysis.db.SQLStatementConsumer;
 import com.sangupta.jerry.util.AssertUtils;
 import com.sangupta.jerry.util.ConsoleUtils;
+import com.sangupta.jerry.util.StringUtils;
 
 
 /**
@@ -140,6 +141,11 @@ public class FileAnalysis implements Closeable {
 				query = "show tables;";
 			}
 			
+			if(query.startsWith("export ")) {
+				doExport(query);
+				continue;
+			}
+			
 			if("exit".equalsIgnoreCase(query)) {
 				break;
 			}
@@ -165,6 +171,42 @@ public class FileAnalysis implements Closeable {
 		} while(true);
 		
 		System.out.println("File Analysis complete.");
+	}
+
+	private void doExport(String query) {
+		String[] tokens = query.split(" ");
+		if(tokens.length != 2) {
+			System.out.println("Invalid syntax: use EXPORT <format>");
+			System.out.println("\twhere format can be CSV, JSON, or XML");
+			return;
+		}
+		
+		final String format = tokens[1].toLowerCase();
+		if(!StringUtils.contains(new String[] { "csv", "json", "xml"}, format)) {
+			System.out.println("Invalid format: use EXPORT <format>");
+			System.out.println("\twhere format can be CSV, JSON, or XML");
+			return;
+		}
+		
+		String selectQuery = ConsoleUtils.readLine("Enter SELECT query (empty for all): ", true);
+		if(AssertUtils.isEmpty(selectQuery)) {
+			selectQuery = "SELECT * FROM DATA;";
+		}
+		
+		this.database.execute(selectQuery, new SQLStatementConsumer() {
+			
+			@Override
+			public void consume(Statement statement) {
+				// display the result appropriately
+				try {
+					new DBResultViewer(database).export(statement, format);
+				} catch (SQLException e) {
+					System.out.println("Unable to display results of the query");
+					e.printStackTrace();
+				}
+			}
+			
+		});
 	}
 	
 	@Override

@@ -21,6 +21,10 @@
 
 package com.sangupta.fileanalysis.db;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintStream;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
@@ -28,7 +32,10 @@ import java.sql.Statement;
 import java.sql.Types;
 import java.util.Arrays;
 
+import org.apache.commons.io.FileUtils;
+
 import com.sangupta.jerry.print.ConsoleTable;
+import com.sangupta.jerry.print.ConsoleTableWriter;
 import com.sangupta.jerry.util.ConsoleUtils;
 
 /**
@@ -67,6 +74,106 @@ public class DBResultViewer {
 		// we do not have any result set
 		// may be an update count etc?
 		System.out.println("Records updated: " + statement.getUpdateCount());
+	}
+	
+	/**
+	 * Export results of a {@link Statement}.
+	 * 
+	 * @param statement
+	 * @throws SQLException
+	 */
+	public void export(Statement statement, String format) throws SQLException {
+		if(statement == null) {
+			// nothing to do
+			return;
+		}
+		
+		if(statement.getResultSet() == null) {
+			System.out.println("No resultset obtained.");
+			return;
+		}
+
+		// results were obtained
+		export(statement.getResultSet(), format);
+		return;
+	}
+
+	private void export(ResultSet resultSet, String format) throws SQLException {
+		if(resultSet == null) {
+			// nothing to do
+			return;
+		}
+		
+		// collect the meta
+		ResultSetMetaData meta = resultSet.getMetaData();
+		
+		final int numColumns = meta.getColumnCount();
+		final int[] colType = new int[numColumns + 1];
+		
+		String[] columns = new String[numColumns];
+		
+		// display the header row
+		for(int index = 1; index <= numColumns; index++) {
+			colType[index] = meta.getColumnType(index);
+			columns[index - 1] = meta.getColumnLabel(index);
+		}
+		final String[] headers = Arrays.copyOf(columns, columns.length);
+		
+		// start iterating over the result set
+		ConsoleTable table = new ConsoleTable();
+		table.addHeaderRow(headers);
+		while (resultSet.next()) {
+			// clean up columns
+			Arrays.fill(columns, "");
+			
+			for(int index = 1; index <= numColumns; index++) {
+				switch(colType[index]) {
+					case Types.DECIMAL:
+					case Types.DOUBLE:
+					case Types.REAL:
+						columns[index - 1] = String.valueOf(resultSet.getDouble(index));
+						continue;
+						
+					case Types.INTEGER:
+					case Types.SMALLINT:
+						columns[index - 1] = String.valueOf(resultSet.getInt(index));
+						continue;
+						
+					case Types.VARCHAR:
+						columns[index - 1] = resultSet.getString(index);
+						continue;
+						
+					case Types.TIMESTAMP:
+						columns[index - 1] = String.valueOf(resultSet.getTimestamp(index));
+						continue;
+
+					case Types.BIGINT:
+						columns[index - 1] = resultSet.getBigDecimal(index).toString();
+						continue;
+				}
+			}
+			table.addRow((Object[]) columns);
+		}
+		
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		PrintStream stream = new PrintStream(baos);
+		
+		if("csv".equalsIgnoreCase(format)) {
+			ConsoleTableWriter.writeCsv(table, stream);
+		} else if("json".equalsIgnoreCase(format)) {
+			ConsoleTableWriter.writeJson(table, stream);
+		} else if("xml".equalsIgnoreCase(format)) {
+			ConsoleTableWriter.writeXml(table, stream, "data", "row");
+		}
+		
+		try {
+			File file = new File("export-" + format + "-" + System.currentTimeMillis() + "." + format);
+			FileUtils.writeByteArrayToFile(file, baos.toByteArray());
+			System.out.println("File written to disk at: " + file.getAbsoluteFile().getAbsolutePath());
+		} catch (IOException e) {
+			System.out.println("Unable to write file to disk.");
+			e.printStackTrace();
+		}
 	}
 
 	/**
