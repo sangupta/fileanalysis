@@ -29,6 +29,7 @@ import com.sangupta.fileanalysis.formats.LogbackFileHandler;
 import com.sangupta.fileanalysis.formats.PipeFileHandler;
 import com.sangupta.fileanalysis.formats.TSVFileHandler;
 import com.sangupta.fileanalysis.formats.base.DoNothingHandler;
+import com.sangupta.jerry.util.AssertUtils;
 
 /**
  * Various supported file formats.
@@ -80,6 +81,20 @@ public enum FileFormat {
 		}
 		
 		return new DoNothingHandler();
+	}
+
+	public static FileFormat forExtension(String extension) {
+		if(AssertUtils.isEmpty(extension)) {
+			throw new IllegalArgumentException("Extension cannot be null/empty");
+		}
+		
+		extension = extension.toLowerCase();
+		
+		if("csv".equals(extension)) {
+			return CSV;
+		}
+		
+		throw new IllegalArgumentException("Unknown filetype");
 	}
 
 }

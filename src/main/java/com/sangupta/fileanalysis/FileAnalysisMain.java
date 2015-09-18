@@ -22,7 +22,11 @@
 package com.sangupta.fileanalysis;
 
 import java.io.File;
+import java.sql.SQLException;
+import java.sql.Statement;
 
+import com.sangupta.fileanalysis.db.DBResultViewer;
+import com.sangupta.fileanalysis.db.SQLStatementConsumer;
 import com.sangupta.jerry.util.AssertUtils;
 import com.sangupta.jerry.util.ConsoleUtils;
 
@@ -59,12 +63,68 @@ public class FileAnalysisMain {
 		try {
 			analysis = new FileAnalysis(file, format);
 			analysis.analyzeFile();
+			
+			// now ask user for input
+			// show the query prompt
+			do {
+				String query = ConsoleUtils.readLine("\nfa-query $ ", true);
+				if(AssertUtils.isBlank(query)) {
+					continue;
+				}
+				
+				if("help".equalsIgnoreCase(query)) {
+					showHelp();
+					continue;
+				}
+				
+				if("desc".equalsIgnoreCase(query)) {
+					System.out.println("Use SHOW COLUMNS FROM DATA instead.\n");
+					query = "show columns from data;";
+				}
+				
+				if("data".equalsIgnoreCase(query)) {
+					System.out.println("Use SELECT * FROM DATA instead.\n");
+					query = "select * from data;";
+				}
+				
+				if("count".equalsIgnoreCase(query)) {
+					System.out.println("Use SELECT COUNT(*) FROM DATA instead.\n");
+					query = "select count(*) from data;";
+				}
+				
+				if("tables".equalsIgnoreCase(query)) {
+					System.out.println("Use SHOW TABLES instead.\n");
+					query = "show tables;";
+				}
+				
+				if(query.startsWith("export ")) {
+					analysis.doExport(query);
+					continue;
+				}
+				
+				if("exit".equalsIgnoreCase(query)) {
+					break;
+				}
+				
+				if("quit".equalsIgnoreCase(query)) {
+					break;
+				}
+				
+				analysis.executeQuery(query);
+			} while(true);
+			
+			System.out.println("File Analysis complete.");
 		} catch(Exception e) {
 			System.out.println("Error analyzing file... exiting!");
 			e.printStackTrace();
 		} finally {
 			analysis.close();
 		}
+	}
+
+	private static void showHelp() {
+		// TODO Auto-generated method stub
+		
 	}
 
 	/**

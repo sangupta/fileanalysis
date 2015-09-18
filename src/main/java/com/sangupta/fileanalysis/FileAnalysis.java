@@ -114,69 +114,6 @@ public class FileAnalysis implements Closeable {
 		
 		// update the list of col sizes in database
 		this.database.updateColSizes();
-		
-		// show the query prompt
-		do {
-			String query = ConsoleUtils.readLine("\nfa-query $ ", true);
-			if(AssertUtils.isBlank(query)) {
-				continue;
-			}
-			
-			if("help".equalsIgnoreCase(query)) {
-				showHelp();
-				continue;
-			}
-			
-			if("desc".equalsIgnoreCase(query)) {
-				System.out.println("Use SHOW COLUMNS FROM DATA instead.\n");
-				query = "show columns from data;";
-			}
-			
-			if("data".equalsIgnoreCase(query)) {
-				System.out.println("Use SELECT * FROM DATA instead.\n");
-				query = "select * from data;";
-			}
-			
-			if("count".equalsIgnoreCase(query)) {
-				System.out.println("Use SELECT COUNT(*) FROM DATA instead.\n");
-				query = "select count(*) from data;";
-			}
-			
-			if("tables".equalsIgnoreCase(query)) {
-				System.out.println("Use SHOW TABLES instead.\n");
-				query = "show tables;";
-			}
-			
-			if(query.startsWith("export ")) {
-				doExport(query);
-				continue;
-			}
-			
-			if("exit".equalsIgnoreCase(query)) {
-				break;
-			}
-			
-			if("quit".equalsIgnoreCase(query)) {
-				break;
-			}
-			
-			this.database.execute(query, new SQLStatementConsumer() {
-				
-				@Override
-				public void consume(Statement statement) {
-					// display the result appropriately
-					try {
-						new DBResultViewer(database).viewResult(statement);
-					} catch (SQLException e) {
-						System.out.println("Unable to display results of the query");
-						e.printStackTrace();
-					}
-				}
-				
-			});
-		} while(true);
-		
-		System.out.println("File Analysis complete.");
 	}
 
 	private void showHelp() {
@@ -194,8 +131,25 @@ public class FileAnalysis implements Closeable {
 		
 		table.write(System.out);
 	}
+	
+	public void executeQuery(String query) {
+		this.database.execute(query, new SQLStatementConsumer() {
+			
+			@Override
+			public void consume(Statement statement) {
+				// display the result appropriately
+				try {
+					new DBResultViewer(database).viewResult(statement);
+				} catch (SQLException e) {
+					System.out.println("Unable to display results of the query");
+					e.printStackTrace();
+				}
+			}
+			
+		});
+	}
 
-	private void doExport(String query) {
+	public void doExport(String query) {
 		String[] tokens = query.split(" ");
 		if(tokens.length != 2) {
 			System.out.println("Invalid syntax: use EXPORT <format>");
