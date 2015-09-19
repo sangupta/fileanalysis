@@ -116,7 +116,7 @@ public class FileAnalysis implements Closeable {
 		this.database.updateColSizes();
 	}
 
-	private void showHelp() {
+	private static void showHelp() {
 		ConsoleTable table = new ConsoleTable();
 		
 		table.addHeaderRow("Command", "Description");
@@ -133,6 +133,36 @@ public class FileAnalysis implements Closeable {
 	}
 	
 	public void executeQuery(String query) {
+		if("help".equalsIgnoreCase(query)) {
+			showHelp();
+			return;
+		}
+		
+		if("desc".equalsIgnoreCase(query)) {
+			System.out.println("Use SHOW COLUMNS FROM DATA instead.\n");
+			query = "show columns from data;";
+		}
+		
+		if("data".equalsIgnoreCase(query)) {
+			System.out.println("Use SELECT * FROM DATA instead.\n");
+			query = "select * from data;";
+		}
+		
+		if("count".equalsIgnoreCase(query)) {
+			System.out.println("Use SELECT COUNT(*) FROM DATA instead.\n");
+			query = "select count(*) from data;";
+		}
+		
+		if("tables".equalsIgnoreCase(query)) {
+			System.out.println("Use SHOW TABLES instead.\n");
+			query = "show tables;";
+		}
+		
+		if(query.startsWith("export ")) {
+			this.doExport(query);
+			return;
+		}
+		
 		this.database.execute(query, new SQLStatementConsumer() {
 			
 			@Override
