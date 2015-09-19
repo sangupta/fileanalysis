@@ -23,7 +23,6 @@ package com.sangupta.fileanalysis;
 
 import java.io.File;
 
-import com.sangupta.jerry.print.ConsoleTable;
 import com.sangupta.jerry.util.AssertUtils;
 import com.sangupta.jerry.util.ConsoleUtils;
 
