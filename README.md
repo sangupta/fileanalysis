@@ -235,7 +235,8 @@ For more information on SemVer, please visit http://semver.org/.
 License
 -------
 	
-Copyright (c) 2014, Sandeep Gupta
+```
+Copyright (c) 2014-2016, Sandeep Gupta
 
 The project uses various other libraries that are subject to their
 own license terms. See the distribution libraries or the project
@@ -252,3 +253,4 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
+```
